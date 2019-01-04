@@ -1,7 +1,7 @@
 import random as r
 
-attackers = 10
-defenders = 10
+attackers = 5
+defenders = 5
 
 def rollDice():
         attackResults = []
@@ -14,7 +14,7 @@ def rollDice():
         for i in range(0, min(2, defenders)):
             defendResults.append(r.randint(1, 6))
             
-        print("Attacker dicerols are ", attaclResults)
+        print("Attacker dicerolls are ", attackResults)
         print("Defenders dicerolls are ", defendResults)
 
     
@@ -29,6 +29,8 @@ def computeResult():
         numbersSmaller = [0]*aSize
         aFirst = 0
         aSecond = 0
+        global attackers
+        global defenders
 
         for i in range(0, aSize):
             cNumb = result[0][i]
@@ -38,13 +40,14 @@ def computeResult():
                 nNumb = result[0][j]
                 if cNumb>=nNumb:
                     numbersSmaller[i] += 1
-       
-       for i in range(0, aSize):
-           cVal = numbersSmaller[i] 
+        for i in range(0, aSize):
+            cVal = numbersSmaller[i] 
             if cVal == aSize-1:
-                afirst = result[0][i]
+                #print("aFirst assigned", result[0][i])
+                aFirst = result[0][i]
                 continue
             if cVal == aSize-2:
+                #print("aSecond assigned", result[0][i])
                 aSecond = result[0][i]
           
         #Handle the special case of 1 attacker
@@ -72,25 +75,35 @@ def computeResult():
             dFirst= result[1][0]
 
 
-       #Ready to compare and kill soldiers
-       defendersSort = [dFirst, dSecond]
-       attackersSort = [dFirst, dSecond]
-       defenderLosses = 0
-       attackerLosses = 0
-       for i in range(0, min(aSize, dSize)):
-           if defendersSort[i]>=attackersSort[i]:
-               attackerLosses += 1
-           else:
-               defenderLosses += 1
+        #Ready to compare and kill soldiers
+        defendersSort = [dFirst, dSecond]
+        attackersSort = [aFirst, aSecond]
+        defenderLosses = 0
+        attackerLosses = 0
+        for i in range(0, min(aSize, dSize)):
+            print("Comparing attacker ", attackersSort[i], " to defender ", defendersSort[i])
+            if defendersSort[i] >= attackersSort[i]:
+                attackerLosses += 1
+            else:
+                defenderLosses += 1
 
-       print("Attacker lost ", attackerLosses)
-       print("Defender lost ", defenderLosses)
-       defenders -= defenderLosses
-       attackers -= attackerLosses
+        print("Attacker lost ", attackerLosses)
+        print("Defender lost ", defenderLosses)
+        defenders -= defenderLosses
+        attackers -= attackerLosses
     
 def runSim():
     while attackers != 0 and defenders != 0:
         computeResult()
+    print("Finished resolving battle, end result is: attackers: ", attackers, " defenders: ", defenders)
+
+
+
+
+
+
+
+runSim()
 
 
 
